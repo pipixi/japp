@@ -16,7 +16,7 @@ pipeline {
         }
         steps {
           container('maven') {
-            sh "mvn clean package"
+            sh "mvn -DskipTests=true clean package"
            // sh 'export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml'
 
 
