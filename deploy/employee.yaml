@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee
+  labels:
+    app: employee
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: employee
+      labels:
+        app: employee
+    spec:
+      serviceAccountName: sample-sc
+      containers:
+        - name: employee
+          image: employee
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+#          envFrom:
+#            - configMapRef:
+#                name: myconfig
+          ports:
+            - containerPort: 8089
+          readinessProbe:
+            httpGet:
+              port: 8089
+              path: /actuator/health/readiness
+          livenessProbe:
+            httpGet:
+              port: 8089
+              path: /actuator/health/liveness
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: employee
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: employee-service
+spec:
+  selector:
+    app: employee
+  ports:
+    - port: 8080
+      targetPort: 8089
+      nodePort: 30089
+  type: NodePort
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k-name
+data:
+  application.yml: |-
+    bean:
+      greeting: Say Hello to the World
+      farewell: Say Goodbye
+    ---
+    spring:
+      profiles: development
+    bean:
+      greeting: Say Hello to the Developers
+      farewell: Say Goodbye to the Developers
+    ---
+    spring:
+      profiles: production
+    bean:
+      greeting: Say Hello to the Ops
+      farewell: Say Goodbye ops
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: employee-role
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "pods", "services", "endpoints", "secrets"]
+    verbs: ["get", "list", "watch"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: employee-binding
+subjects:
+  - kind: ServiceAccount
+    name: sample-sc
+roleRef:
+  kind: Role
+  name: employee-role
+  apiGroup: rbac.authorization.k8s.io
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: sample-sc

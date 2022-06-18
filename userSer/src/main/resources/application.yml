@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: user-service
+  cloud:
+    kubernetes:
+      loadbalancer:
+        mode: service
+      config:
+        namespace: default
+        name: k-name
+      discovery:
+        all-namespaces: false
+server:
+  port: 8089
+management:
+  endpoint:
+    restart:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,info
