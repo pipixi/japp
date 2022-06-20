@@ -5,11 +5,11 @@
     <parent>
         <artifactId>japp</artifactId>
         <groupId>com.example</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>deptSer</artifactId>
+    <artifactId>dept-service</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -30,10 +30,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-kubernetes-client-loadbalancer</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-kubernetes-client-all</artifactId>
         </dependency>
         <dependency>
@@ -41,23 +37,5 @@
             <artifactId>hutool-core</artifactId>
             <version>5.8.3</version>
         </dependency>
-
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>4.1.77.Final</version>
-        </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <outputDirectory>../deploy</outputDirectory>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
