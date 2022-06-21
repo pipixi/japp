@@ -46,7 +46,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: employee-service
+  name: dept-service
 spec:
   selector:
     app: deptser

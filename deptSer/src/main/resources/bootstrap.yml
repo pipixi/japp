@@ -8,7 +8,7 @@ spring:
         mode: polling
         period: 5000
       config:
-        #use config named k-name
+        #use config named k-name, see deploy/user.yaml ConfigMap
         sources:
           - name: k-name
       discovery:
