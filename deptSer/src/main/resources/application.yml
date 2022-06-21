@@ -1,13 +1,3 @@
-spring:
-  application:
-    name: employee-service
-  cloud:
-    kubernetes:
-      config:
-        namespace: default
-        name: k-name
-      discovery:
-        all-namespaces: false
 server:
   port: 8089
 management:

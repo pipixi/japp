@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: userser
+  name: deptser
   labels:
-    app: userser
+    app: deptser
 spec:
-  replicas: 1
+  replicas: 2
   template:
     metadata:
-      name: userser
+      name: deptser
       labels:
-        app: userser
+        app: deptser
     spec:
       serviceAccountName: sample-sc
       containers:
-        - name: userser
-          image: userser
+        - name: deptser
+          image: dept-service:1.0
           imagePullPolicy: IfNotPresent
           env:
             - name: SPRING_PROFILES_INCLUDE
@@ -40,20 +40,20 @@ spec:
       restartPolicy: Always
   selector:
     matchLabels:
-      app: userser
+      app: deptser
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: kservice
+  name: employee-service
 spec:
   selector:
-    app: userser
+    app: deptser
   ports:
     - port: 8080
       targetPort: 8089
-      nodePort: 30088
+      nodePort: 30089
   type: NodePort
 
 ---
@@ -78,29 +78,3 @@ data:
     bean:
       greeting: Say Hello to the Ops
       farewell: Say Goodbye ops
----
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: userser-role
-rules:
-  - apiGroups: [""]
-    resources: ["configmaps", "pods", "services", "endpoints", "secrets"]
-    verbs: ["get", "list", "watch"]
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: userser-binding
-subjects:
-  - kind: ServiceAccount
-    name: sample-sc
-roleRef:
-  kind: Role
-  name: userser-role
-  apiGroup: rbac.authorization.k8s.io
----
-kind: ServiceAccount
-apiVersion: v1
-metadata:
-  name: sample-sc
