@@ -1,5 +1,7 @@
 
 ## compile && build docker image to docker daemon 
+> you need install [docker](https://docs.docker.com/get-docker/) first.
+
 `mvn clean compile`
 
 ## deploy to k8s
